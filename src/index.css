@@ -1,13 +1,335 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Підключення шрифту */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+/* Сучасна колірна палітра та змінні */
+:root {
+    --primary: #10b981; /* Смарагдовий (Emerald) */
+    --primary-hover: #059669;
+    --dark: #0f172a; /* Глибокий синьо-сірий (Slate 900) */
+    --darker: #020617;
+    --light: #f8fafc; /* Дуже світлий сірий для фону */
+    --surface: #ffffff; /* Білий для карток */
+    --text-main: #334155;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    
+    /* Дорогі м'які тіні */
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+    --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.01);
+    
+    --radius: 16px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--light);
+    color: var(--text-main);
+    margin: 0;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased; /* Згладжування шрифтів */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* ==========================================
+   ШАПКА (GLASSMORPHISM)
+   ========================================== */
+.header {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(12px); /* Ефект розмиття фону */
+    -webkit-backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 1.2rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.5px;
+}
+.logo span { color: var(--primary); }
+
+.nav-list {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+    margin: 0; 
+    padding: 0;
+}
+.nav-list a {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+.nav-list a:hover { color: #fff; }
+
+/* ==========================================
+   БАНЕР (HERO)
+   ========================================== */
+.hero {
+    background: linear-gradient(to bottom, rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.95)), url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=1500&q=80') center/cover;
+    height: 70vh;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.hero h1 {
+    color: #fff;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin-bottom: 1.5rem;
+}
+.hero p {
+    color: #94a3b8;
+    font-size: 1.25rem;
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+}
+
+/* ==========================================
+   КНОПКИ
+   ========================================== */
+.btn {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 50px;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.3); /* Світіння кнопки */
+    text-decoration: none;
+    display: inline-block;
+}
+.btn:hover:not(:disabled) {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+.btn:disabled {
+    background: #e2e8f0;
+    color: #94a3b8;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+/* ==========================================
+   СЕКЦІЇ ТА БЛОКИ
+   ========================================== */
+.section { padding: 6rem 0; }
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 3.5rem;
+    letter-spacing: -0.5px;
+}
+.bg-light {
+    background: var(--surface);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border);
+}
+.rounded-section {
+    border-radius: var(--radius);
+    padding: 3.5rem;
+}
+
+/* ==========================================
+   КАРТКИ ТРЕНУВАНЬ
+   ========================================== */
+.workout-grid {
+    display: grid;
+    /* Крок 1: Зробити картки трохи ширшими (змінити 320px на 360px або 400px) */
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 2.5rem;
+    /* Крок 2: Вирівняти сітку по центру батьківського елемента */
+    justify-content: center;
+}
+.card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+}
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+}
+.card img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+}
+.card-content {
+    padding: 2.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+.card h3 {
+    margin: 0 0 1rem;
+    font-size: 1.4rem;
+    color: var(--dark);
+    font-weight: 700;
+}
+.features {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    margin: 1.5rem 0;
+    border-top: 1px dashed var(--border);
+    border-bottom: 1px dashed var(--border);
+    color: var(--text-muted);
+    font-weight: 600;
+    list-style: none;
+}
+
+/* ==========================================
+   СПИСКИ ТА СТАТТІ (АКОРДЕОН)
+   ========================================== */
+.diet-list {
+    list-style: none;
+    padding: 0;
+}
+.diet-list li {
+    background: var(--light);
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    border: 1px solid var(--border);
+    font-weight: 500;
+}
+.article-item {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.2rem;
+    border: 1px solid var(--border);
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+}
+.article-item:hover {
+    box-shadow: var(--shadow-md);
+    border-color: #cbd5e1;
+}
+.article-title {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--dark);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+}
+.article-content {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--border);
+    color: var(--text-muted);
+    line-height: 1.8;
+}
+
+/* ==========================================
+   ФОРМИ
+   ========================================== */
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+.form-control {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 1rem;
+    background: var(--light);
+    transition: var(--transition);
+    margin-bottom: 1.5rem;
+    box-sizing: border-box;
+}
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: var(--surface);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1); /* Преміальне кільце фокусу */
+}
+
+/* Кнопки звичок */
+.habit-btn {
+    background: var(--surface);
+    color: var(--dark);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    box-shadow: none;
+}
+.habit-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--light);
+}
+
+/* ==========================================
+   ФУТЕР
+   ========================================== */
+.footer {
+    background: var(--darker);
+    padding: 5rem 0 2rem;
+    color: #94a3b8;
+}
+.footer h3 {
+    color: #fff;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+.copy {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    font-size: 0.9rem;
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+    .header-container { flex-direction: column; gap: 1rem; }
+    .nav-list { gap: 1rem; flex-wrap: wrap; justify-content: center; }
+    .section { padding: 4rem 0; }
+    .rounded-section { padding: 2rem 1.5rem; }
+    .hero h1 { font-size: 2rem; }
 }
