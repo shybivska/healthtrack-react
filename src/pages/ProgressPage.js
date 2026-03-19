@@ -1,13 +1,24 @@
 import React from 'react';
+import ProgressStats from '../components/ProgressStats'; // ІМПОРТУЄМО КОМПОНЕНТ
 
-export default function ProgressPage() {
+export default function ProgressPage({ log }) {
   return (
     <section className="section bg-light rounded-section" style={{ marginTop: '40px' }}>
       <h2 className="section-title">Мій прогрес 📈</h2>
-      <p>Ваша активність за останній тиждень зросла на <strong>15%</strong>. Ви виконали 4 тренування та спалили 1200 ккал!</p>
-      <div className="stats" style={{ padding: '20px', border: '2px dashed #2980b9', borderRadius: '10px', marginTop: '20px' }}>
-        <p><strong>Ваші досягнення:</strong> 🌟 "Рання пташка", 🚫 "Тиждень без цукру".</p>
-      </div>
+      
+      {/* ВИКОРИСТОВУЄМО КОМПОНЕНТ СТАТИСТИКИ */}
+      <ProgressStats />
+
+      <h3 style={{ borderBottom: '2px solid #27ae60', paddingBottom: '5px' }}>Журнал тренувань 📓</h3>
+      {(!log || log.length === 0) ? (
+        <p>Ви ще не виконали нових тренувань сьогодні.</p>
+      ) : (
+        <ul className="diet-list">
+          {log.map((entry, index) => (
+            <li key={index} dangerouslySetInnerHTML={{ __html: entry }} style={{ borderLeft: '4px solid #27ae60', paddingLeft: '10px', marginBottom: '10px' }} />
+          ))}
+        </ul>
+      )}
     </section>
   );
 }
