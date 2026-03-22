@@ -9,9 +9,27 @@ export default function WorkoutCard({ workout, onComplete }) {
       setStatus('in_progress');
     } else if (status === 'in_progress') {
       setStatus('completed');
-      onComplete(workout.title, workout.time);
+      onComplete(workout.title, workout.time, workout.type);
     }
   };
+
+  // Визначаємо текст і колір залежно від поточного статусу
+  let statusText = 'Не розпочато';
+  let statusColor = '#7f8c8d'; // сірий
+  let buttonText = 'Почати тренування';
+  let buttonColor = '';
+
+  if (status === 'in_progress') {
+    statusText = 'В процесі... ⏳';
+    statusColor = '#e67e22'; // помаранчевий
+    buttonText = 'Завершити тренування';
+    buttonColor = '#e67e22';
+  } else if (status === 'completed') {
+    statusText = 'Завершено ✅';
+    statusColor = '#27ae60'; // зелений
+    buttonText = 'Виконано';
+    buttonColor = '#bdc3c7'; // світло-сірий
+  }
 
   return (
     <article className="card" style={{ opacity: status === 'completed' ? 0.8 : 1 }}>
@@ -23,16 +41,19 @@ export default function WorkoutCard({ workout, onComplete }) {
           <li>⏱ {workout.time}</li>
           <li>📊 {workout.level}</li>
         </ul>
-        <p style={{ fontWeight: 'bold', color: status === 'completed' ? '#27ae60' : '#7f8c8d' }}>
-          Статус: {status === 'not_started' ? 'Не розпочато' : status === 'in_progress' ? 'В процесі... ⏳' : 'Завершено ✅'}
+        
+        {/* Тепер текст і колір підставляються зі змінних, які ми визначили вище */}
+        <p style={{ fontWeight: 'bold', color: statusColor }}>
+          Статус: {statusText}
         </p>
+        
         <button 
           className="btn" 
           onClick={handleClick}
           disabled={status === 'completed'}
-          style={{ width: '100%', marginTop: '15px', background: status === 'in_progress' ? '#e67e22' : status === 'completed' ? '#bdc3c7' : '' }}
+          style={{ width: '100%', marginTop: '15px', background: buttonColor }}
         >
-          {status === 'not_started' ? 'Почати тренування' : status === 'in_progress' ? 'Завершити тренування' : 'Виконано'}
+          {buttonText}
         </button>
       </div>
     </article>

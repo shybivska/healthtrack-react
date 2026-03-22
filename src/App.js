@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { HashRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore'; 
-import { auth, db } from './firebase'; 
+import { auth } from './firebase'; 
 
 import HomePage from './pages/HomePage';
 import WorkoutsPage from './pages/WorkoutsPage';
@@ -13,28 +12,11 @@ import './index.css';
 
 function App() {
   const [user, setUser] = useState(null);
-  const [workoutLog, setWorkoutLog] = useState([]); 
 
+  // Відстежуємо вхід/вихід користувача
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      
-      if (currentUser) {
-        try {
-          const userDocRef = doc(db, "userLogs", currentUser.uid);
-          const docSnap = await getDoc(userDocRef);
-          
-          if (docSnap.exists()) {
-            setWorkoutLog(docSnap.data().log || []);
-          } else {
-            setWorkoutLog([]);
-          }
-        } catch (error) {
-          console.error("Помилка завантаження журналу:", error);
-        }
-      } else {
-        setWorkoutLog([]);
-      }
     });
     return () => unsubscribe();
   }, []);
@@ -48,16 +30,25 @@ function App() {
     }
   };
 
-  const handleAddLog = async (entry) => {
-    const updatedLog = [...workoutLog, entry];
-    setWorkoutLog(updatedLog); 
-
+  // НОВА ФУНКЦІЯ: Відправляємо POST запит на наш власний сервер
+  const handleAddLog = async (title, time, type) => {
     if (user) {
       try {
-        const userDocRef = doc(db, "userLogs", user.uid);
-        await setDoc(userDocRef, { log: updatedLog }, { merge: true });
+        await fetch("https://healthtrack-backend-7neg.onrender.com/api/workouts", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            title: title,
+            time: time,
+            type: type,
+            userId: user.uid
+          })
+        });
+        alert("Клас! Тренування відправлено на сервер!");
       } catch (error) {
-        console.error("Помилка збереження журналу в базу:", error);
+        console.error("Помилка відправки на сервер:", error);
       }
     }
   };
@@ -69,15 +60,10 @@ function App() {
           <div className="logo">Health<span>Track</span></div>
           <nav className="nav">
             <ul className="nav-list" style={{ alignItems: 'center' }}>
-              {/* === ПУБЛІЧНІ СТОРІНКИ (Бачать усі) === */}
               <li><Link to="/">Головна</Link></li>
               <li><Link to="/workouts">Тренування</Link></li>
               <li><Link to="/diet">Раціон</Link></li>
-              
-              {/* === ЗАКРИТА СТОРІНКА (Тільки для авторизованих) === */}
               {user && <li><Link to="/progress">Прогрес</Link></li>}
-              
-              {/* Кнопки */}
               {user ? (
                 <li>
                   <button onClick={handleLogout} className="btn habit-btn" style={{ padding: '8px 16px', marginLeft: '15px' }}>
@@ -98,16 +84,14 @@ function App() {
 
       <main>
         <Routes>
-          {/* ВІДКРИТІ МАРШРУТИ */}
           <Route path="/" element={<HomePage />} />
           <Route path="/workouts" element={<WorkoutsPage onAddLog={handleAddLog} />} />
           <Route path="/diet" element={<DietPage />} />
           <Route path="/auth" element={user ? <Navigate to="/" replace /> : <AuthPage />} />
-          
-          {/* ЗАКРИТИЙ МАРШРУТ */}
+          {/* ЗМІНЕНО: Тепер ми передаємо user в сторінку прогресу, щоб вона сама дістала дані з сервера */}
           <Route 
             path="/progress" 
-            element={user ? <ProgressPage log={workoutLog} /> : <Navigate to="/auth" replace />} 
+            element={user ? <ProgressPage user={user} /> : <Navigate to="/auth" replace />} 
           />
         </Routes>
       </main>
