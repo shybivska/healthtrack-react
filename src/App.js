@@ -31,26 +31,23 @@ function App() {
   };
 
   // НОВА ФУНКЦІЯ: Відправляємо POST запит на наш власний сервер
-  const handleAddLog = async (title, time, type) => {
-    if (user) {
-      try {
-        await fetch("https://healthtrack-backend-7neg.onrender.com/api/workouts", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            title: title,
-            time: time,
-            type: type,
-            userId: user.uid
-          })
-        });
-        alert("Клас! Тренування відправлено на сервер!");
-      } catch (error) {
-        console.error("Помилка відправки на сервер:", error);
-      }
-    }
+  const handleAddLog = async (title, durationMinutes, type) => {
+    const caloriesBurned = durationMinutes * 7; // Наприклад, 7 ккал за хвилину
+
+  const newLog = {
+    userId: user.uid,
+    title: title,
+    duration: durationMinutes, // Відправляємо число
+    type: type,
+    calories: caloriesBurned, // Теж число
+    date: new Date().toISOString()
+  };
+
+  await fetch("https://healthtrack-backend-7neg.onrender.com/api/workouts", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(newLog)
+  });
   };
 
   return (
