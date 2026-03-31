@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/healthtrack-react/static/css/main.77497403.css",
-    "main.js": "/healthtrack-react/static/js/main.9571c4ba.js",
+    "main.js": "/healthtrack-react/static/js/main.b4e83c30.js",
     "static/js/453.f643f128.chunk.js": "/healthtrack-react/static/js/453.f643f128.chunk.js",
     "index.html": "/healthtrack-react/index.html",
     "main.77497403.css.map": "/healthtrack-react/static/css/main.77497403.css.map",
-    "main.9571c4ba.js.map": "/healthtrack-react/static/js/main.9571c4ba.js.map",
+    "main.b4e83c30.js.map": "/healthtrack-react/static/js/main.b4e83c30.js.map",
     "453.f643f128.chunk.js.map": "/healthtrack-react/static/js/453.f643f128.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.77497403.css",
-    "static/js/main.9571c4ba.js"
+    "static/js/main.b4e83c30.js"
   ]
 }
