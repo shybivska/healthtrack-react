@@ -28,10 +28,9 @@ export default function WorkoutsPage({ onAddLog }) {
 
   const filteredWorkouts = workouts.filter(w => filter === 'all' || w.type === filter);
 
-  const handleWorkoutComplete = (title, time, type) => {
-    const currentTime = new Date().toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' });
-    onAddLog(`<strong>${title}</strong> — Тривалість: ${time} (Завершено о ${currentTime})`);
-  };
+  const handleWorkoutComplete = (title, durationMinutes, type) => {
+  onAddLog(title, durationMinutes, type);
+};
 
   return (
     <section className="section">
