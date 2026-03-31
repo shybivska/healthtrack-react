@@ -66,9 +66,8 @@ export default function ProgressPage({ user }) {
             
             return (
               <li key={index} style={{ borderLeft: '4px solid #27ae60', paddingLeft: '10px', marginBottom: '10px' }}>
-                {/* 3. Замінили w.time на w.duration, щоб показувати реальний час секундоміра */}
-                <strong>{w.title}</strong> — Тривалість: <strong>{w.duration} хв</strong> <em>(Виконано: {dateString} о {timeString})</em>
-              </li>
+                <strong>{w.title}</strong> — Тривалість: {w.duration || 0} хв <em>(Виконано: {dateString} о {timeString})</em>
+                </li>
             );
           })}
         </ul>
